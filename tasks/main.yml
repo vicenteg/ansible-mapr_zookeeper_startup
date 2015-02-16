@@ -1,0 +1,16 @@
+---
+# tasks file for mapr_zookeeper_startup
+
+- name: ensure mapr user owns /opt/mapr/zkdata
+  file: path=/opt/mapr/zkdata owner=mapr group=mapr mode=0750 state=directory
+
+- name: start zookeeper on ZK nodes
+  service: name=mapr-zookeeper state=started enabled=yes
+  register: zk_started
+
+- name: wait for zookeeper to be listening
+  wait_for: port=5181 delay=10 timeout=90
+
+- name: wait for a few more seconds to let zookeepers initialize
+  pause: seconds=15
+  when: zk_started.changed
