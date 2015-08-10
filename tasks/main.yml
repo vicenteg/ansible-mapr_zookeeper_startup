@@ -12,5 +12,5 @@
   wait_for: port=5181 delay=10 timeout=90
 
 - name: wait for a few more seconds to let zookeepers initialize
-  pause: seconds=15
+  pause: seconds=5
   when: zk_started.changed
