@@ -2,11 +2,13 @@
 # tasks file for mapr_zookeeper_startup
 
 - name: ensure mapr user owns /opt/mapr/zkdata
-  sudo_user: root
+  become: yes
+  become_user: root
   file: path=/opt/mapr/zkdata owner='{{mapr_admin_username}}' group='{{mapr_admin_username}}' mode=0750 state=directory
 
 - name: start zookeeper on ZK nodes
-  sudo_user: root
+  become: yes
+  become_user: root
   service: name=mapr-zookeeper state=started enabled=yes
   register: zk_started
 
