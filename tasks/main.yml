@@ -12,9 +12,5 @@
   service: name=mapr-zookeeper state=started enabled=yes
   register: zk_started
 
-- name: wait for zookeeper to be listening
-  wait_for: port=5181 delay=10 timeout=90
-
-- name: wait for a few more seconds to let zookeepers initialize
-  pause: seconds=5
-  when: zk_started.changed
+- name: wait for zookeeper election to be complete
+  wait_for: path=/opt/mapr/zookeeper/zookeeper-3.4.5/logs/zookeeper.log search_regex='QuorumPeer.*(LEADING|FOLLOWING)'
